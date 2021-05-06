@@ -7,7 +7,7 @@ class Dijkstra:
         # 2.value -> distance/cost from source
     def next(self):
         # finds nodes not visited
-        self.m = -32 # min
+        self.m = -32 # node
         for i in range(self.vexlen):
             # choosing node with shortest way
             if (self.vad[i][0] == 0) and (self.m < 0 or self.vad[i][1] <= self.vad[self.m][1]):
@@ -17,34 +17,38 @@ class Dijkstra:
         self.vextable = vext;self.vexlen = len(self.vextable[0])
     def giveEdgTable(self, edg):
         self.edgtable = edg;self.edglen = len(self.edgtable[0])
-    def findWay(self):
-        self.times = []
-        vexs, nxtt, ng, nds, self.dEdges = [], [], [], [], []
+    # Algorithm Stuff
+    def addInfinities(self):
         i = 0
         while i < self.vexlen-1:
             self.vad.append([0, 10**10])
             i = i + 1
+    def findWay(self):
+        self.times = []
+        self.vads = []
+        vexs, nxtt, ng, nds, self.dEdges = [], [], [], [], []
+        self.addInfinities() # add 10**10 until node count to the vad
         f = 0
-        for vertex in range(self.vexlen):
+        for i in range(self.vexlen):
             self.times.append([timeit.default_timer()]) # timer start
             nxt = self.next() # finding the next node
             nxtt.append(nxt)
-            vexs.append(vertex)
-            for nghi in range(self.vexlen):
+            vexs.append(i)
+            for ni in range(self.vexlen):
                 # calculation of distance for unvisited nodes
-                if (self.vad[nghi][0] == 0) and (self.vextable[nxt][nghi] == 1):
-                    ng.append(nghi)
+                if (self.vad[ni][0] != 1) and (self.vextable[nxt][ni] == 1): # if neighbor has not been visited and neighbor is available
+                    ng.append(ni)
                     # update neighbor's distance if distance is available
-                    nt = self.vad[nxt][1] + self.edgtable[nxt][nghi]
-                    nds.append(nt)
+                    nds.append((self.vad[nxt][1] + self.edgtable[nxt][ni])) # previus+present
                     #print(nxt,ndist)
                     # if the newly calculated value is greater
-                    if self.vad[nghi][1] > nt:
-                        self.vad[nghi][1] = nt
-                        self.dEdges.append([nxt,nghi,nt]) # dijkstra edges
-            self.vad[nxt][0] = 1 # visit the previously located node
+                    if (self.vad[nxt][1] + self.edgtable[nxt][ni]) < self.vad[ni][1]:
+                        self.vads.append(self.vad)
+                        self.vad[ni][1] = (self.vad[nxt][1] + self.edgtable[nxt][ni]) # update neighbor cost
+                        self.dEdges.append([nxt,ni,(self.vad[nxt][1] + self.edgtable[nxt][ni])]) # dijkstra edges
+            self.vad[nxt][0] = 1 # visited
             self.times[f].append(timeit.default_timer()) # timer stop
-            f = f+1
+            f = f + 1
         self.nxtt = nxtt
         self.ng = ng
         self.nds = nds
@@ -136,6 +140,7 @@ class Dijkstra:
     def showEdgesDF(self):
         # this function is static, configure before using
         newp = self.combineSimilars()
+        self.nx = newp
         for i in newp:
             i.rename(columns={0:'s', 1:'d', 2:'c'}, inplace=True)
         newp[1].index = [2,3]

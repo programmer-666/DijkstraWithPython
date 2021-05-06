@@ -13,8 +13,8 @@ class Thread2(threading.Thread):
 # 
 
 graph = CreateGraph()
-#graph.readCSV('graph1.csv')
-graph.readCSV('internal.csv')
+graph.readCSV('graph1.csv')
+#graph.readCSV('internal.csv')
 
 print('# Vertex Table #')
 print(graph.convertAdjTable()[0]) # Vertex Table

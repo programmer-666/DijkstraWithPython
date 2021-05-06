@@ -2,6 +2,8 @@ import hashlib
 from random import randbytes
 import pandas as pd
 import numpy as np
+import networkx as nx
+import matplotlib.pyplot as plt
 
 class CreateGraph:
     def __init__(self):
@@ -32,6 +34,7 @@ class CreateGraph:
         self.__edge.append((sN, dN, v))
     def readCSV(self, filename):
         csvdata = pd.read_csv('libs/comnetpr/CSV/'+str(filename), skipinitialspace = True)
+        self.rawcsv = csvdata
         for i in range(len(csvdata)):
             self.addEdge(csvdata['sn'][i], csvdata['dn'][i], csvdata['v'][i])
     # input functions
@@ -57,3 +60,10 @@ class CreateGraph:
         # taking edge data
         return (self.vertextTable, self.edgeTable)
     # convert
+    def getGraph(self, ax):
+        g = nx.from_pandas_edgelist(self.rawcsv, source='sn', target='dn', edge_attr='v')
+        pos=nx.spring_layout(g) 
+        nx.draw_networkx(g,pos, font_color='white', cmap='inferno', node_color='#1c1c1c', ax=ax)
+        labels = nx.get_edge_attributes(g,'v')
+        return nx.draw_networkx_edge_labels(g,pos, edge_labels=labels, ax=ax)
+    # graphic
