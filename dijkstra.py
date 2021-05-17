@@ -22,9 +22,9 @@ calcWay = dijkstra.findWay()
 os.system('cls')
 
 # Shortest Ways #
-shortestWaysTable = dijkstra.showEdgesDF()
-print('# Shortest Ways (Dataframe) #')
-print(shortestWaysTable, '\n')
+#shortestWaysTable = dijkstra.showEdgesDF()
+#print('# Shortest Ways (Dataframe) #')
+#print(shortestWaysTable, '\n')
 for i in range(len(calcWay)):
     print(calcWay[i][0], i+1, calcWay[i][1])
 djk_e = pd.DataFrame(dijkstra.getDEdges(), columns=['s', 'd', 'v'])

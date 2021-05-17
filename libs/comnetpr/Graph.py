@@ -67,3 +67,6 @@ class CreateGraph:
         labels = nx.get_edge_attributes(g,'v')
         return nx.draw_networkx_edge_labels(g,pos, edge_labels=labels, ax=ax)
     # graphic
+    
+class RandomizedGraphCreator:
+    pass
